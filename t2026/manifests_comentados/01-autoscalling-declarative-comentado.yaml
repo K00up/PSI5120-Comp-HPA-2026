@@ -1,0 +1,43 @@
+# Define a versão da API do Kubernetes para autoescalonamento (v2 suporta métricas avançadas)
+apiVersion: autoscaling/v2
+
+# Define o tipo de recurso: um autoescalador horizontal de Pods (HPA)
+kind: HorizontalPodAutoscaler
+
+# Dados de identificação do recurso HPA
+metadata:
+  # Nome do autoscaler dentro do cluster
+  name: php-apache
+
+# Especificações do comportamento do autoescalonamento
+spec:
+  # Referência ao recurso alvo que o HPA deve monitorar e escalar
+  scaleTargetRef:
+    # Versão da API do recurso alvo (Deployment)
+    apiVersion: apps/v1
+    # Tipo do recurso que será escalado (neste caso, um Deployment)
+    kind: Deployment
+    # Nome exato do Deployment alvo que este HPA vai controlar
+    name: php-apache
+
+  # Número MÍNIMO de Pods mantidos rodando (mesmo se a CPU estiver zerada)
+  minReplicas: 1
+
+  # Número MÁXIMO de Pods que o Kubernetes pode criar ao aumentar o tráfego
+  maxReplicas: 10
+
+  # Regras de métricas usadas para decidir quando criar ou remover Pods
+  metrics:
+  # Tipo da métrica monitorada (Resource indica recursos de hardware do sistema, como CPU/Memória)
+  - type: Resource
+    resource:
+      # Nome do recurso físico monitorado (neste caso, a CPU)
+      name: cpu
+      # Definição do alvo (meta) para disparo da regra
+      target:
+        # Medição baseada na porcentagem da requisição (Utilization)
+        type: Utilization
+        # Meta: 50% de uso médio de CPU entre todos os Pods. 
+        # Se a média passar de 50%, novos Pods serão criados.
+        # Se a média baixar de 50%, o Kubernetes reduzirá o número de Pods.
+        averageUtilization: 50
