@@ -5,4 +5,4 @@ Os arquivos  .yaml utlizados estão em 2 pastas no diretorio t2026 sendo elas:
 
 Se quiser entender cada comando baixe e veja o comentado
 
-Por questao de simplificação e limpeza todo o escopo utilizado foi o da pasta manifest
+$$Por questao de simplificação e limpeza todo o escopo utilizado foi o da pasta manifest$$
